@@ -1,0 +1,300 @@
+/* UserNavBar.css */
+
+/* Main navbar container */
+.user-navbar-wrapper {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.user-navbar-wrapper .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 70px;
+}
+
+/* Left section - Brand/Logo */
+.user-navbar-wrapper .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #667eea;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.user-navbar-wrapper .navbar-brand span {
+    color: #764ba2;
+}
+
+/* Middle section - Navigation links */
+.user-navbar-wrapper .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-navbar-wrapper .navbarss {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+.user-navbar-wrapper .navbarss h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.user-navbar-wrapper .navbarss:hover {
+    color: #667eea;
+    background: #f0f2ff;
+    transform: translateY(-1px);
+}
+
+.user-navbar-wrapper .navbarss:hover h4 {
+    color: #667eea;
+}
+
+/* Active link styles */
+.user-navbar-wrapper .navbarss.active {
+    color: #667eea;
+    background: #f0f2ff;
+    font-weight: 600;
+}
+
+.user-navbar-wrapper .navbarss.active h4 {
+    color: #667eea;
+}
+
+/* Right section - User icon */
+.user-navbar-wrapper .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-navbar-wrapper .user-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0f2ff;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.user-navbar-wrapper .user-icon-wrapper:hover {
+    background: #667eea;
+    border-color: #667eea;
+    transform: scale(1.05);
+}
+
+.user-navbar-wrapper .user-icon-wrapper:hover .user-icon {
+    color: #ffffff;
+}
+
+.user-navbar-wrapper .user-icon {
+    font-size: 1.3rem;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+/* Reset any inherited styles */
+.user-navbar-wrapper * {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.user-navbar-wrapper .navbar h4,
+.user-navbar-wrapper .navbar a {
+    all: revert;
+}
+
+/* Re-apply our styles after revert */
+.user-navbar-wrapper .navbarss h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.user-navbar-wrapper .navbarss:hover h4 {
+    color: #667eea;
+}
+
+.user-navbar-wrapper .navbarss.active h4 {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .user-navbar-wrapper .navbar {
+        padding: 0 25px;
+        height: 65px;
+    }
+
+    .user-navbar-wrapper .navbarss {
+        font-size: 0.9rem;
+        padding: 6px 14px;
+    }
+
+    .user-navbar-wrapper .navbarss h4 {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .user-navbar-wrapper .navbar {
+        padding: 0 15px;
+        height: 60px;
+        flex-wrap: wrap;
+    }
+
+    .user-navbar-wrapper .nav-links {
+        gap: 4px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .user-navbar-wrapper .navbarss {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+
+    .user-navbar-wrapper .navbarss h4 {
+        font-size: 0.8rem;
+    }
+
+    .user-navbar-wrapper .user-icon {
+        font-size: 1.1rem;
+    }
+
+    .user-navbar-wrapper .user-icon-wrapper {
+        width: 35px;
+        height: 35px;
+    }
+
+    .user-navbar-wrapper .navbar-brand {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-navbar-wrapper .navbar {
+        padding: 0 10px;
+        height: auto;
+        min-height: 55px;
+        gap: 5px;
+    }
+
+    .user-navbar-wrapper .nav-links {
+        gap: 3px;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        order: 3;
+        padding: 5px 0;
+    }
+
+    .user-navbar-wrapper .navbarss {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+
+    .user-navbar-wrapper .navbarss h4 {
+        font-size: 0.7rem;
+    }
+
+    .user-navbar-wrapper .user-icon {
+        font-size: 1rem;
+    }
+
+    .user-navbar-wrapper .user-icon-wrapper {
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-navbar-wrapper .navbar-brand {
+        font-size: 0.9rem;
+    }
+
+    /* Hide brand on very small screens */
+    .user-navbar-wrapper .navbar-brand {
+        display: none;
+    }
+}
+
+/* Animation */
+.user-navbar-wrapper .navbar {
+    animation: userNavbarFadeIn 0.4s ease-out;
+}
+
+@keyframes userNavbarFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Optional: Add a subtle pulse animation to active link */
+.user-navbar-wrapper .navbarss.active {
+    animation: userNavbarPulse 2s infinite;
+}
+
+@keyframes userNavbarPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.05);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.1);
+    }
+}
+
+/* Optional: Badge for notifications */
+.user-navbar-wrapper .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff6b6b;
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+.user-navbar-wrapper .navbarss {
+    position: relative;
+}

@@ -1,0 +1,329 @@
+/* ClubsRegistrationModal.css */
+
+/* Use ID-based selectors for maximum specificity */
+#clubs-modal-root .modal-content {
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+    overflow: hidden !important;
+    animation: clubsModalSlideIn 0.3s ease-out !important;
+}
+
+@keyframes clubsModalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#clubs-modal-root .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    padding: 20px 30px !important;
+    border-bottom: none !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+#clubs-modal-root .modal-header .modal-title {
+    color: white !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+}
+
+#clubs-modal-root .modal-header .btn-close {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+    padding: 8px !important;
+    opacity: 0.8 !important;
+    transition: all 0.3s ease !important;
+    filter: brightness(0) invert(1) !important;
+}
+
+#clubs-modal-root .modal-header .btn-close:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: rotate(90deg) !important;
+}
+
+#clubs-modal-root .modal-body {
+    padding: 30px !important;
+    background: #f8f9ff !important;
+}
+
+#clubs-modal-root .club-details-section {
+    background: white !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+#clubs-modal-root .club-details-title {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #333 !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 2px solid #f0f2ff !important;
+}
+
+#clubs-modal-root .club-detail-item {
+    display: flex !important;
+    margin-bottom: 6px !important;
+    color: #555 !important;
+    font-size: 0.95rem !important;
+}
+
+#clubs-modal-root .club-detail-item strong {
+    color: #333 !important;
+    font-weight: 600 !important;
+    min-width: 120px !important;
+}
+
+#clubs-modal-root .modal-divider {
+    border: none !important;
+    border-top: 2px solid #e8ecf1 !important;
+    margin: 20px 0 !important;
+}
+
+#clubs-modal-root .modal-form {
+    margin-top: 10px !important;
+}
+
+#clubs-modal-root .form-group {
+    margin-bottom: 20px !important;
+}
+
+#clubs-modal-root .form-label {
+    font-weight: 600 !important;
+    color: #444 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 6px !important;
+}
+
+#clubs-modal-root .form-label .required-star {
+    color: #ff6b6b !important;
+    margin-left: 4px !important;
+}
+
+#clubs-modal-root .form-control {
+    border: 2px solid #e0e4e8 !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+    background: white !important;
+    color: #333 !important;
+}
+
+#clubs-modal-root .form-control:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15) !important;
+    background: white !important;
+}
+
+#clubs-modal-root .form-control.is-invalid {
+    border-color: #ff6b6b !important;
+}
+
+#clubs-modal-root .form-control.is-invalid:focus {
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15) !important;
+}
+
+#clubs-modal-root .form-control::placeholder {
+    color: #aaa !important;
+    font-size: 0.9rem !important;
+}
+
+#clubs-modal-root textarea.form-control {
+    resize: vertical !important;
+    min-height: 80px !important;
+}
+
+#clubs-modal-root .invalid-feedback {
+    color: #ff6b6b !important;
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+}
+
+#clubs-modal-root .modal-footer {
+    padding: 20px 30px !important;
+    background: white !important;
+    border-top: 1px solid #e8ecf1 !important;
+    border-radius: 0 0 20px 20px !important;
+}
+
+#clubs-modal-root .modal-footer .btn {
+    padding: 10px 30px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+}
+
+#clubs-modal-root .modal-footer .btn-secondary {
+    background: #f0f2ff !important;
+    color: #667eea !important;
+    border: 2px solid #e0e4e8 !important;
+}
+
+#clubs-modal-root .modal-footer .btn-secondary:hover {
+    background: #e8ecf1 !important;
+    transform: translateY(-2px) !important;
+}
+
+#clubs-modal-root .modal-footer .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+#clubs-modal-root .modal-footer .btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+}
+
+#clubs-modal-root .modal-footer .btn-primary:disabled {
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+#clubs-modal-root .modal-footer .btn-primary:active {
+    transform: translateY(0px) !important;
+}
+
+/* Pulse animation */
+#clubs-modal-root .modal-footer .btn-primary:not(:disabled) {
+    animation: clubsModalPulse 3s infinite !important;
+}
+
+@keyframes clubsModalPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(102, 126, 234, 0.5);
+    }
+}
+
+/* Scrollable modal body */
+#clubs-modal-root .modal-body {
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+}
+
+#clubs-modal-root .modal-body::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+#clubs-modal-root .modal-body::-webkit-scrollbar-track {
+    background: #f0f2ff !important;
+    border-radius: 10px !important;
+}
+
+#clubs-modal-root .modal-body::-webkit-scrollbar-thumb {
+    background: #667eea !important;
+    border-radius: 10px !important;
+}
+
+#clubs-modal-root .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #764ba2 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #clubs-modal-root .modal-content {
+        border-radius: 15px !important;
+        margin: 10px !important;
+    }
+
+    #clubs-modal-root .modal-header {
+        padding: 15px 20px !important;
+    }
+
+    #clubs-modal-root .modal-header .modal-title {
+        font-size: 1.2rem !important;
+    }
+
+    #clubs-modal-root .modal-body {
+        padding: 20px !important;
+    }
+
+    #clubs-modal-root .club-details-section {
+        padding: 15px !important;
+    }
+
+    #clubs-modal-root .club-detail-item {
+        flex-direction: column !important;
+        margin-bottom: 4px !important;
+    }
+
+    #clubs-modal-root .club-detail-item strong {
+        min-width: auto !important;
+        margin-bottom: 2px !important;
+    }
+
+    #clubs-modal-root .modal-footer {
+        padding: 15px 20px !important;
+    }
+
+    #clubs-modal-root .modal-footer .btn {
+        padding: 8px 20px !important;
+        font-size: 0.9rem !important;
+        flex: 1 !important;
+    }
+
+    #clubs-modal-root .form-label {
+        font-size: 0.9rem !important;
+    }
+
+    #clubs-modal-root .form-control {
+        font-size: 0.9rem !important;
+        padding: 8px 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #clubs-modal-root .modal-header {
+        padding: 12px 15px !important;
+    }
+
+    #clubs-modal-root .modal-header .modal-title {
+        font-size: 1rem !important;
+    }
+
+    #clubs-modal-root .modal-body {
+        padding: 15px !important;
+    }
+
+    #clubs-modal-root .modal-footer {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    #clubs-modal-root .modal-footer .btn {
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    #clubs-modal-root .form-control {
+        font-size: 0.85rem !important;
+        padding: 8px 10px !important;
+    }
+
+    #clubs-modal-root .club-details-section {
+        padding: 12px !important;
+    }
+
+    #clubs-modal-root .club-detail-item {
+        font-size: 0.85rem !important;
+    }
+}

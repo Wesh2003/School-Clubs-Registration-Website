@@ -1,0 +1,750 @@
+/* ClubApplications.css */
+
+/* Main wrapper */
+.club-applications-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 30px 20px;
+}
+
+.club-applications-wrapper .applications-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.club-applications-wrapper .applications-header {
+    margin-bottom: 30px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.club-applications-wrapper .applications-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.club-applications-wrapper .applications-subtitle {
+    color: #666;
+    font-size: 1.05rem;
+}
+
+/* Club Selector */
+.club-applications-wrapper .club-selector-wrapper {
+    margin-bottom: 25px;
+}
+
+.club-applications-wrapper .club-selector-label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+.club-applications-wrapper .club-selector {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 16px;
+    border: 2px solid #e0e4e8;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fafbff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.club-applications-wrapper .club-selector:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+/* Statistics Cards */
+.club-applications-wrapper .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.club-applications-wrapper .stat-card {
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.club-applications-wrapper .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.club-applications-wrapper .stat-card-total {
+    background: white;
+    border: 1px solid #e8ecf1;
+}
+
+.club-applications-wrapper .stat-card-pending {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+}
+
+.club-applications-wrapper .stat-card-approved {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+}
+
+.club-applications-wrapper .stat-card-rejected {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+}
+
+.club-applications-wrapper .stat-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.club-applications-wrapper .stat-label-total {
+    color: #6b7280;
+}
+
+.club-applications-wrapper .stat-label-pending {
+    color: #92400e;
+}
+
+.club-applications-wrapper .stat-label-approved {
+    color: #166534;
+}
+
+.club-applications-wrapper .stat-label-rejected {
+    color: #991b1b;
+}
+
+.club-applications-wrapper .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.club-applications-wrapper .stat-value-total {
+    color: #1f2937;
+}
+
+.club-applications-wrapper .stat-value-pending {
+    color: #92400e;
+}
+
+.club-applications-wrapper .stat-value-approved {
+    color: #166534;
+}
+
+.club-applications-wrapper .stat-value-rejected {
+    color: #991b1b;
+}
+
+/* Search and Filters */
+.club-applications-wrapper .search-filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.club-applications-wrapper .search-input-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+
+.club-applications-wrapper .search-input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #e0e4e8;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: #fafbff;
+    color: #333;
+    outline: none;
+}
+
+.club-applications-wrapper .search-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+    background: #ffffff;
+}
+
+.club-applications-wrapper .search-input::placeholder {
+    color: #aaa;
+}
+
+.club-applications-wrapper .filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.club-applications-wrapper .filter-label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.club-applications-wrapper .filter-select {
+    padding: 10px 16px;
+    border: 2px solid #e0e4e8;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    background: #fafbff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    min-width: 140px;
+}
+
+.club-applications-wrapper .filter-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+/* Loading State */
+.club-applications-wrapper .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 40px;
+}
+
+.club-applications-wrapper .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f0f2ff;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: applicationsSpin 1s linear infinite;
+}
+
+@keyframes applicationsSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.club-applications-wrapper .loading-text {
+    color: #666;
+    margin-top: 15px;
+    font-size: 1rem;
+}
+
+/* Error State */
+.club-applications-wrapper .error-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    border: 2px solid #ff6b6b;
+}
+
+.club-applications-wrapper .error-title {
+    color: #ff6b6b;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.club-applications-wrapper .error-message {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Empty State */
+.club-applications-wrapper .empty-state {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px dashed #e0e4e8;
+    border-radius: 16px;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.club-applications-wrapper .empty-icon {
+    margin: 0 auto 20px;
+    color: #c0c4c8;
+}
+
+.club-applications-wrapper .empty-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.club-applications-wrapper .empty-text {
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* Applications List */
+.club-applications-wrapper .applications-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Application Card */
+.club-applications-wrapper .application-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e8ecf1;
+    border-radius: 16px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.club-applications-wrapper .application-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.club-applications-wrapper .application-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.club-applications-wrapper .applicant-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.club-applications-wrapper .status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.club-applications-wrapper .status-badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.club-applications-wrapper .status-badge-approved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.club-applications-wrapper .status-badge-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.club-applications-wrapper .application-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.club-applications-wrapper .application-detail-item {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.club-applications-wrapper .application-detail-item strong {
+    color: #444;
+    font-weight: 600;
+}
+
+.club-applications-wrapper .application-reason {
+    background: #f8f9ff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-top: 6px;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border-left: 3px solid #667eea;
+}
+
+.club-applications-wrapper .application-skills {
+    background: #f8f9ff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-top: 6px;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border-left: 3px solid #764ba2;
+}
+
+.club-applications-wrapper .application-review-section {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9ff;
+    border: 1px solid #e8ecf1;
+    border-radius: 12px;
+}
+
+.club-applications-wrapper .application-review-notes {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.club-applications-wrapper .application-review-date {
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Action Buttons */
+.club-applications-wrapper .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.club-applications-wrapper .btn-accept {
+    padding: 10px 24px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.club-applications-wrapper .btn-accept:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.club-applications-wrapper .btn-reject {
+    padding: 10px 24px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.club-applications-wrapper .btn-reject:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.club-applications-wrapper .btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Review Modal */
+.club-applications-wrapper .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.club-applications-wrapper .modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 550px;
+    width: 90%;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.club-applications-wrapper .modal-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.club-applications-wrapper .modal-subtitle {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.club-applications-wrapper .modal-applicant-name {
+    font-weight: 700;
+    color: #333;
+}
+
+.club-applications-wrapper .modal-details-box {
+    background: #f8f9ff;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.club-applications-wrapper .modal-detail-label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.club-applications-wrapper .modal-detail-text {
+    color: #555;
+    font-size: 0.95rem;
+    padding-left: 8px;
+    border-left: 2px solid #667eea;
+    margin-top: 4px;
+}
+
+.club-applications-wrapper .modal-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e4e8;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.club-applications-wrapper .modal-textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+.club-applications-wrapper .modal-textarea::placeholder {
+    color: #aaa;
+}
+
+.club-applications-wrapper .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.club-applications-wrapper .modal-btn-cancel {
+    padding: 10px 24px;
+    background: #f3f4f6;
+    color: #4b5563;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.club-applications-wrapper .modal-btn-cancel:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.club-applications-wrapper .modal-btn-accept {
+    padding: 10px 24px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.club-applications-wrapper .modal-btn-accept:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.club-applications-wrapper .modal-btn-reject {
+    padding: 10px 24px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.club-applications-wrapper .modal-btn-reject:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .club-applications-wrapper .applications-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .club-applications-wrapper {
+        padding: 20px 15px;
+    }
+
+    .club-applications-wrapper .applications-header {
+        padding: 20px;
+    }
+
+    .club-applications-wrapper .applications-title {
+        font-size: 1.8rem;
+    }
+
+    .club-applications-wrapper .applications-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .club-applications-wrapper .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .club-applications-wrapper .search-filter-section {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .club-applications-wrapper .search-input-wrapper {
+        min-width: 100%;
+    }
+
+    .club-applications-wrapper .filter-wrapper {
+        width: 100%;
+    }
+
+    .club-applications-wrapper .filter-select {
+        flex: 1;
+        min-width: auto;
+    }
+
+    .club-applications-wrapper .application-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .club-applications-wrapper .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .club-applications-wrapper .btn-accept,
+    .club-applications-wrapper .btn-reject {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .club-applications-wrapper .modal-content {
+        padding: 24px 20px;
+        margin: 20px;
+    }
+
+    .club-applications-wrapper .modal-actions {
+        flex-direction: column;
+    }
+
+    .club-applications-wrapper .modal-btn-cancel,
+    .club-applications-wrapper .modal-btn-accept,
+    .club-applications-wrapper .modal-btn-reject {
+        width: 100%;
+        text-align: center;
+    }
+
+    .club-applications-wrapper .club-selector {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .club-applications-wrapper .applications-title {
+        font-size: 1.5rem;
+    }
+
+    .club-applications-wrapper .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .club-applications-wrapper .stat-card {
+        padding: 15px;
+    }
+
+    .club-applications-wrapper .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .club-applications-wrapper .application-card {
+        padding: 18px;
+    }
+
+    .club-applications-wrapper .applicant-name {
+        font-size: 1rem;
+    }
+
+    .club-applications-wrapper .application-reason,
+    .club-applications-wrapper .application-skills {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+    }
+}

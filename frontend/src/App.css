@@ -1,0 +1,22 @@
+.hover-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Add to your main CSS file or index.css */
+.modal-content {
+    border: none !important;
+}
+
+.modal-header {
+    border-bottom: none !important;
+}

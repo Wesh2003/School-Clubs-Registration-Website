@@ -1,0 +1,373 @@
+/* ClubsTable.css */
+
+/* Main container */
+.clubs-table-wrapper {
+    padding: 30px 20px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.clubs-table-wrapper .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header section */
+.clubs-table-wrapper .clubs-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.clubs-table-wrapper .clubs-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.clubs-table-wrapper .clubs-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Search bar wrapper */
+.clubs-table-wrapper .search-wrapper {
+    max-width: 500px;
+    margin: 0 auto 15px;
+}
+
+/* Category filter wrapper */
+.clubs-table-wrapper .category-wrapper {
+    margin-top: 15px;
+}
+
+/* Card grid */
+.clubs-table-wrapper .clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+/* Individual club cards */
+.clubs-table-wrapper .club-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.clubs-table-wrapper .club-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.25);
+    border-color: #667eea;
+}
+
+.clubs-table-wrapper .club-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.clubs-table-wrapper .club-card-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.clubs-table-wrapper .club-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.clubs-table-wrapper .club-card:hover .club-card-title {
+    color: #667eea;
+}
+
+.clubs-table-wrapper .club-card-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    align-self: flex-start;
+}
+
+.clubs-table-wrapper .club-card-description {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    flex: 1;
+}
+
+.clubs-table-wrapper .club-card-detail {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.clubs-table-wrapper .club-card-detail strong {
+    color: #444;
+    font-weight: 600;
+}
+
+.clubs-table-wrapper .club-card-fee {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #f0f2ff;
+    color: #667eea;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 8px;
+    align-self: flex-start;
+}
+
+.clubs-table-wrapper .club-card-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.clubs-table-wrapper .club-card-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.clubs-table-wrapper .club-card-button:active {
+    transform: translateY(0px);
+}
+
+/* No clubs found message */
+.clubs-table-wrapper .no-clubs-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    grid-column: 1 / -1;
+}
+
+.clubs-table-wrapper .no-clubs-message p {
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Loading state */
+.clubs-table-wrapper .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 40px;
+}
+
+.clubs-table-wrapper .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f0f2ff;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: clubsTableSpin 1s linear infinite;
+}
+
+@keyframes clubsTableSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.clubs-table-wrapper .loading-text {
+    margin-top: 15px;
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Error state */
+.clubs-table-wrapper .error-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    border: 2px solid #ff6b6b;
+}
+
+.clubs-table-wrapper .error-heading {
+    color: #ff6b6b;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.clubs-table-wrapper .error-message {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.clubs-table-wrapper .error-button {
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clubs-table-wrapper .error-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .clubs-table-wrapper .clubs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .clubs-table-wrapper .clubs-heading {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .clubs-table-wrapper {
+        padding: 20px 15px;
+    }
+
+    .clubs-table-wrapper .clubs-header {
+        padding: 20px 15px;
+    }
+
+    .clubs-table-wrapper .clubs-heading {
+        font-size: 1.8rem;
+    }
+
+    .clubs-table-wrapper .clubs-subtitle {
+        font-size: 1rem;
+    }
+
+    .clubs-table-wrapper .clubs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .clubs-table-wrapper .club-card-image {
+        height: 160px;
+    }
+
+    .clubs-table-wrapper .club-card-title {
+        font-size: 1.1rem;
+    }
+
+    .clubs-table-wrapper .club-card-description {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .clubs-table-wrapper {
+        padding: 15px 10px;
+    }
+
+    .clubs-table-wrapper .clubs-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .clubs-table-wrapper .clubs-heading {
+        font-size: 1.5rem;
+    }
+
+    .clubs-table-wrapper .clubs-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .clubs-table-wrapper .club-card-image {
+        height: 140px;
+    }
+
+    .clubs-table-wrapper .club-card-body {
+        padding: 15px;
+    }
+
+    .clubs-table-wrapper .club-card-title {
+        font-size: 1rem;
+    }
+
+    .clubs-table-wrapper .club-card-description {
+        font-size: 0.85rem;
+    }
+
+    .clubs-table-wrapper .club-card-detail {
+        font-size: 0.8rem;
+    }
+
+    .clubs-table-wrapper .club-card-button {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
+
+/* Animation for cards */
+.clubs-table-wrapper .club-card {
+    animation: clubsTableFadeIn 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+.clubs-table-wrapper .club-card:nth-child(1) { animation-delay: 0.05s; }
+.clubs-table-wrapper .club-card:nth-child(2) { animation-delay: 0.1s; }
+.clubs-table-wrapper .club-card:nth-child(3) { animation-delay: 0.15s; }
+.clubs-table-wrapper .club-card:nth-child(4) { animation-delay: 0.2s; }
+.clubs-table-wrapper .club-card:nth-child(5) { animation-delay: 0.25s; }
+.clubs-table-wrapper .club-card:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes clubsTableFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
