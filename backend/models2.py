@@ -26,7 +26,8 @@ class Users(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "date_added": self.date_added.strftime('%Y-%m-%d %H:%M:%S') if self.date_added else None
+            "date_added": self.date_added.strftime('%Y-%m-%d %H:%M:%S') if self.date_added else None,
+            "is_active": self.is_active
         }
 
 # 2. Admins (Website administrators)

@@ -1,380 +1,400 @@
-// ClubMembers.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import '../css/ClubMembers.css';
 
-const ClubMembers = () => {
+function ClubMembers() {
+  const [clubLeaders, setClubLeaders] = useState([]);
+  const [selectedClub, setSelectedClub] = useState(null);
   const [members, setMembers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [clubInfo, setClubInfo] = useState(null);
-  const [selectedClub, setSelectedClub] = useState(null);
-  const [leaderClubs, setLeaderClubs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [notification, setNotification] = useState(null);
+  const navigate = useNavigate();
 
-  // Get the token from localStorage
   const token = localStorage.getItem('access_token');
   const userId = localStorage.getItem('user_id');
 
-  // Configure axios with token
-  const axiosConfig = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
+  // Show notification
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  // Fetch club leader's clubs and members
-  useEffect(() => {
-    if (token && userId) {
-      fetchLeaderClubs();
-    } else {
-      setError('Please log in to view club members');
-      setLoading(false);
-    }
-  }, [token, userId]);
-
-  const fetchLeaderClubs = async () => {
-    try {
-      // Get the user's club leadership roles
-      const response = await axios.get(`http://localhost:5000/dashboard`, axiosConfig);
-      
-      if (response.data.club_leader_for && response.data.club_leader_for.length > 0) {
-        const clubs = response.data.club_leader_for;
-        setLeaderClubs(clubs);
-        
-        // Auto-select the first club if available
-        if (clubs.length > 0) {
-          const clubId = clubs[0].club_id;
-          setSelectedClub(clubId);
-          await fetchClubMembers(clubId);
-          await fetchClubInfo(clubId);
-        }
-      } else {
-        setError('You are not a club leader for any club');
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error('Error fetching leader clubs:', err);
-      setError('Failed to fetch your clubs. Please try again.');
-      setLoading(false);
-    }
-  };
-
-  const fetchClubMembers = async (clubId) => {
+  // Fetch data
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Get all memberships and filter by club
-      const response = await axios.get(`http://localhost:5000/memberships`, axiosConfig);
-      
-      // Filter memberships for the selected club
-      const clubMemberships = response.data.filter(
-        membership => membership.club_id === clubId && membership.status === 'active'
-      );
-      
-      // Fetch full user details for each member
-      const memberPromises = clubMemberships.map(async (membership) => {
-        try {
-          const userResponse = await axios.get(
-            `http://localhost:5000/users/${membership.user_id}`,
-            axiosConfig
-          );
-          return {
-            ...membership,
-            user_details: userResponse.data
-          };
-        } catch (err) {
-          console.error(`Error fetching user ${membership.user_id}:`, err);
-          return membership;
+
+      // Fetch user's dashboard to get club leadership
+      const dashboardResponse = await fetch('http://127.0.0.1:5000/dashboard', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
+
+      if (!dashboardResponse.ok) {
+        throw new Error('Failed to fetch dashboard data');
+      }
+
+      const dashboardData = await dashboardResponse.json();
       
-      const membersWithDetails = await Promise.all(memberPromises);
-      setMembers(membersWithDetails);
+      // Get club leader info
+      const leaderClubs = dashboardData.club_leader_for || [];
       
+      if (leaderClubs.length === 0) {
+        setError('You are not a club leader for any club.');
+        setLoading(false);
+        return;
+      }
+
+      setClubLeaders(leaderClubs);
+      
+      // Select the first club by default
+      const firstClub = leaderClubs[0];
+      setSelectedClub(firstClub);
+
+      // Fetch all clubs for reference
+      const clubsResponse = await fetch('http://127.0.0.1:5000/clubs', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (clubsResponse.ok) {
+        const clubsData = await clubsResponse.json();
+        setClubs(clubsData);
+      }
+
+      // Fetch members for the selected club using the new endpoint
+      await fetchClubMembers(firstClub.club_id);
+
+      // Fetch all users for adding members
+      const usersResponse = await fetch('http://127.0.0.1:5000/club/users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (usersResponse.ok) {
+        const usersData = await usersResponse.json();
+        setAllUsers(usersData);
+      } else {
+        console.warn('Could not fetch users for adding members');
+        setAllUsers([]);
+      }
+
     } catch (err) {
-      console.error('Error fetching members:', err);
-      setError('Failed to fetch members. Please try again.');
+      console.error('Error fetching data:', err);
+      setError(err.message || 'Failed to load data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchClubInfo = async (clubId) => {
+  // Fetch club members using the new endpoint
+  const fetchClubMembers = async (clubId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/clubs/${clubId}`);
-      setClubInfo(response.data);
+      const response = await fetch(`http://127.0.0.1:5000/club/members/${clubId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch members');
+      }
+
+      const data = await response.json();
+      setMembers(data);
+      
     } catch (err) {
-      console.error('Error fetching club info:', err);
+      console.error('Error fetching members:', err);
+      showNotification(err.message || 'Failed to fetch members', 'error');
     }
   };
 
-  const handleClubChange = (e) => {
-    const clubId = parseInt(e.target.value);
-    setSelectedClub(clubId);
-    fetchClubMembers(clubId);
-    fetchClubInfo(clubId);
+  useEffect(() => {
+    if (!token || !userId) {
+      navigate('/login');
+      return;
+    }
+    fetchData();
+  }, []);
+
+  // Handle club change
+  const handleClubChange = (clubId) => {
+    const club = clubLeaders.find(c => c.club_id === clubId);
+    if (club) {
+      setSelectedClub(club);
+      fetchClubMembers(clubId);
+    }
   };
 
-  const handleDeleteMember = async () => {
-    if (!selectedMember) return;
+  // Add member
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+    
+    if (!selectedUser) {
+      showNotification('Please select a user to add.', 'error');
+      return;
+    }
 
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/memberships/${selectedMember.id}`,
-        axiosConfig
-      );
-      
-      toast.success(`Removed ${selectedMember.user_details?.first_name || 'member'} from the club successfully!`);
-      
-      // Refresh the members list
-      await fetchClubMembers(selectedClub);
+      const response = await fetch('http://127.0.0.1:5000/memberships', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_id: parseInt(selectedUser),
+          club_id: selectedClub.club_id
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add member');
+      }
+
+      showNotification('Member added successfully!');
+      setShowAddModal(false);
+      setSelectedUser('');
+      fetchClubMembers(selectedClub.club_id);
+    } catch (err) {
+      console.error('Error adding member:', err);
+      showNotification(err.message || 'Failed to add member', 'error');
+    }
+  };
+
+  // Delete member - UPDATED to use the new endpoint
+  const handleDeleteMember = async () => {
+    try {
+      // Use the new endpoint for club leaders to remove members
+      const response = await fetch(`http://127.0.0.1:5000/club/members/${selectedMember.membership_id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to remove member');
+      }
+
+      showNotification('Member removed successfully!');
       setShowDeleteModal(false);
       setSelectedMember(null);
-      
+      fetchClubMembers(selectedClub.club_id);
     } catch (err) {
-      console.error('Error deleting member:', err);
-      toast.error('Failed to remove member. Please try again.');
+      console.error('Error removing member:', err);
+      showNotification(err.message || 'Failed to remove member', 'error');
     }
   };
 
-  const openDeleteModal = (member) => {
-    setSelectedMember(member);
-    setShowDeleteModal(true);
+  // Get club name by ID
+  const getClubName = (clubId) => {
+    const club = clubs.find(c => c.id === clubId);
+    return club ? club.name : 'Unknown Club';
   };
 
-  const closeDeleteModal = () => {
-    setShowDeleteModal(false);
-    setSelectedMember(null);
+  // Get user full name
+  const getUserFullName = (member) => {
+    return member ? `${member.first_name} ${member.last_name}` : 'Unknown User';
   };
 
-  // Filter members based on search term
+  // Get user email
+  const getUserEmail = (member) => {
+    return member ? member.email : 'N/A';
+  };
+
+  // Filter members based on search
   const filteredMembers = members.filter(member => {
-    if (!searchTerm) return true;
-    const fullName = member.user_details 
-      ? `${member.user_details.first_name} ${member.user_details.last_name}`.toLowerCase()
-      : '';
-    const email = member.user_details?.email?.toLowerCase() || '';
-    return fullName.includes(searchTerm.toLowerCase()) || 
-           email.includes(searchTerm.toLowerCase());
+    const fullName = getUserFullName(member).toLowerCase();
+    const email = getUserEmail(member).toLowerCase();
+    const search = searchTerm.toLowerCase();
+    return fullName.includes(search) || email.includes(search);
   });
+
+  // Get available users (not already members)
+  const getAvailableUsers = () => {
+    const memberIds = members.map(m => m.user_id);
+    return allUsers.filter(user => !memberIds.includes(user.id) && user.id !== parseInt(userId));
+  };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="club-members-wrapper">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading club members...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          <p className="font-medium">Error</p>
-          <p className="text-sm">{error}</p>
+      <div className="club-members-wrapper">
+        <div className="error-container">
+          <div className="error-icon">⚠️</div>
+          <h3 className="error-title">Error Loading Data</h3>
+          <p className="error-message">{error}</p>
+          <button className="error-btn" onClick={fetchData}>
+            Try Again
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Club Members</h1>
-        <p className="mt-2 text-gray-600">
-          View and manage members of your club(s)
-        </p>
-      </div>
-
-      {/* Club Selector */}
-      {leaderClubs.length > 1 && (
-        <div className="mb-6">
-          <label htmlFor="club-select" className="block text-sm font-medium text-gray-700 mb-2">
-            Select Club
-          </label>
-          <select
-            id="club-select"
-            value={selectedClub || ''}
-            onChange={handleClubChange}
-            className="w-full md:w-64 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            {leaderClubs.map((club) => (
-              <option key={club.club_id} value={club.club_id}>
-                {club.club?.name || `Club ${club.club_id}`}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Club Info Card */}
-      {clubInfo && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-            {clubInfo.name}
-          </h2>
-          <p className="text-gray-600">{clubInfo.description}</p>
-          <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <span className="font-medium text-gray-700">Total Members:</span>
-              <span className="ml-2 text-gray-900">{members.length}</span>
-            </div>
-            {clubInfo.meeting_day && (
-              <div>
-                <span className="font-medium text-gray-700">Meeting Day:</span>
-                <span className="ml-2 text-gray-900">{clubInfo.meeting_day}</span>
-              </div>
-            )}
-            {clubInfo.meeting_time && (
-              <div>
-                <span className="font-medium text-gray-700">Time:</span>
-                <span className="ml-2 text-gray-900">{clubInfo.meeting_time}</span>
-              </div>
-            )}
-            {clubInfo.faculty_advisor && (
-              <div>
-                <span className="font-medium text-gray-700">Advisor:</span>
-                <span className="ml-2 text-gray-900">{clubInfo.faculty_advisor}</span>
-              </div>
-            )}
+    <div className="club-members-wrapper">
+      <div className="club-members-container">
+        {/* Notification */}
+        {notification && (
+          <div className={`notification ${notification.type === 'error' ? 'notification-error' : 'notification-success'}`}>
+            {notification.message}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Search and Actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div className="w-full md:w-96">
+        {/* Header */}
+        <div className="club-members-header">
+          <div>
+            <h1 className="club-members-title">👥 Club Members</h1>
+            <p className="club-members-subtitle">Manage members of your club</p>
+          </div>
+          <button className="btn-add" onClick={() => setShowAddModal(true)}>
+            + Add Member
+          </button>
+        </div>
+
+        {/* Club Selector */}
+        {clubLeaders.length > 1 && (
+          <div className="club-selector-wrapper">
+            <label className="club-selector-label">Select Club:</label>
+            <select
+              value={selectedClub?.club_id || ''}
+              onChange={(e) => handleClubChange(parseInt(e.target.value))}
+              className="club-selector"
+            >
+              {clubLeaders.map((leader) => (
+                <option key={leader.club_id} value={leader.club_id}>
+                  {getClubName(leader.club_id)} ({leader.position})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Club Info */}
+        {selectedClub && (
+          <div className="club-info-card">
+            <div className="club-info-header">
+              <h2 className="club-info-name">{getClubName(selectedClub.club_id)}</h2>
+              <span className="club-info-position">{selectedClub.position}</span>
+            </div>
+            <div className="club-info-stats">
+              <span className="stat-item">
+                <span className="stat-label">Total Members:</span>
+                <span className="stat-value">{members.length}</span>
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Search Bar */}
+        <div className="search-wrapper">
           <input
             type="text"
             placeholder="Search members by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="search-input"
           />
+          <span className="search-icon">🔍</span>
         </div>
-        <div className="text-sm text-gray-600">
-          Showing {filteredMembers.length} of {members.length} members
-        </div>
-      </div>
 
-      {/* Members Table */}
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-        {members.length === 0 ? (
-          <div className="text-center py-12">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No members yet</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              This club doesn't have any members yet.
+        {/* Members Table */}
+        {filteredMembers.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">👤</div>
+            <h3 className="empty-title">No members found</h3>
+            <p className="empty-text">
+              {searchTerm ? 'No members match your search criteria.' : 'This club has no members yet.'}
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="members-table-container">
+            <table className="members-table">
+              <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Joined Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th>ID</th>
+                  <th>Member</th>
+                  <th>Email</th>
+                  <th>Joined Date</th>
+                  <th>Role</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody>
                 {filteredMembers.map((member) => (
-                  <tr key={member.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                          <span className="text-blue-600 font-medium text-sm">
-                            {member.user_details?.first_name?.[0] || 'U'}
-                          </span>
-                        </div>
-                        <div className="ml-3">
-                          <div className="text-sm font-medium text-gray-900">
-                            {member.user_details 
-                              ? `${member.user_details.first_name} ${member.user_details.last_name}`
-                              : 'Unknown User'}
-                          </div>
-                        </div>
-                      </div>
+                  <tr key={member.membership_id}>
+                    <td className="member-id">#{member.membership_id}</td>
+                    <td className="member-name">
+                      <span className="member-initials">
+                        {getUserFullName(member).split(' ').map(n => n[0]).join('')}
+                      </span>
+                      {getUserFullName(member)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {member.user_details?.email || 'N/A'}
+                    <td className="member-email">{getUserEmail(member)}</td>
+                    <td className="member-date">
+                      {member.join_date ? new Date(member.join_date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      }) : 'N/A'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {member.join_date ? new Date(member.join_date).toLocaleDateString() : 'N/A'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                        ${member.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                          member.role === 'president' ? 'bg-blue-100 text-blue-800' :
-                          member.role === 'vice_president' ? 'bg-indigo-100 text-indigo-800' :
-                          'bg-gray-100 text-gray-800'}`}
-                      >
+                    <td>
+                      <span className={`member-role ${member.role || 'member'}`}>
                         {member.role || 'Member'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                        ${member.status === 'active' ? 'bg-green-100 text-green-800' :
-                          member.status === 'inactive' ? 'bg-red-100 text-red-800' :
-                          'bg-yellow-100 text-yellow-800'}`}
-                      >
-                        {member.status || 'Active'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => openDeleteModal(member)}
-                        className="text-red-600 hover:text-red-900 transition-colors"
-                        title="Remove member from club"
-                      >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                    <td className="member-actions">
+                      {member.user_id !== parseInt(userId) && (
+                        <button 
+                          className="btn-remove"
+                          onClick={() => {
+                            setSelectedMember(member);
+                            setShowDeleteModal(true);
+                          }}
+                          title="Remove Member"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
+                          🗑️
+                        </button>
+                      )}
+                      {member.user_id === parseInt(userId) && (
+                        <span className="self-badge">You</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -382,60 +402,118 @@ const ClubMembers = () => {
             </table>
           </div>
         )}
-      </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && selectedMember && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
-          <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-            <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg
-                  className="h-6 w-6 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
+        {/* ==================== ADD MEMBER MODAL ==================== */}
+        {showAddModal && (
+          <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2 className="modal-title">➕ Add Member</h2>
+                <button className="modal-close" onClick={() => setShowAddModal(false)}>×</button>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Remove Member
-              </h3>
-              <p className="text-sm text-gray-500 mb-4">
-                Are you sure you want to remove{' '}
-                <span className="font-semibold text-gray-900">
-                  {selectedMember.user_details 
-                    ? `${selectedMember.user_details.first_name} ${selectedMember.user_details.last_name}`
-                    : 'this member'}
-                </span>
-                {' '}from {clubInfo?.name || 'the club'}?
-              </p>
-              <div className="flex justify-center gap-3">
-                <button
-                  onClick={closeDeleteModal}
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
-                >
+              <form onSubmit={handleAddMember}>
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label className="form-label">Select User *</label>
+                    <select
+                      value={selectedUser}
+                      onChange={(e) => setSelectedUser(e.target.value)}
+                      className="form-select"
+                      required
+                    >
+                      <option value="">Select a user...</option>
+                      {getAvailableUsers().map(user => (
+                        <option key={user.id} value={user.id}>
+                          {user.first_name} {user.last_name} ({user.email})
+                        </option>
+                      ))}
+                    </select>
+                    {getAvailableUsers().length === 0 && (
+                      <p className="form-hint">All users are already members of this club.</p>
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Club</label>
+                    <div className="form-static-display">
+                      <span className="static-icon">🏛️</span>
+                      <span>{getClubName(selectedClub.club_id)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="btn-submit"
+                    disabled={getAvailableUsers().length === 0}
+                  >
+                    Add Member
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* ==================== DELETE MEMBER MODAL ==================== */}
+        {showDeleteModal && selectedMember && (
+          <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+            <div className="modal-content delete-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2 className="modal-title">🗑️ Remove Member</h2>
+                <button className="modal-close" onClick={() => setShowDeleteModal(false)}>×</button>
+              </div>
+              <div className="modal-body">
+                <div className="delete-icon">⚠️</div>
+                <p className="delete-text">
+                  Are you sure you want to remove <strong>"{getUserFullName(selectedMember)}"</strong> from <strong>"{getClubName(selectedClub.club_id)}"</strong>?
+                </p>
+                <div className="delete-details">
+                  <div className="detail-row">
+                    <span className="detail-label">Member:</span>
+                    <span className="detail-value">{getUserFullName(selectedMember)}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Email:</span>
+                    <span className="detail-value">{getUserEmail(selectedMember)}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Joined:</span>
+                    <span className="detail-value">
+                      {selectedMember.join_date ? new Date(selectedMember.join_date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      }) : 'N/A'}
+                    </span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Role:</span>
+                    <span className="detail-value">{selectedMember.role || 'Member'}</span>
+                  </div>
+                </div>
+                <p className="delete-warning">
+                  This action cannot be undone. The user will lose access to this club.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn-cancel" onClick={() => setShowDeleteModal(false)}>
                   Cancel
                 </button>
-                <button
-                  onClick={handleDeleteMember}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                >
+                <button type="button" className="btn-delete-confirm" onClick={handleDeleteMember}>
                   Remove Member
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
-};
+}
 
 export default ClubMembers;

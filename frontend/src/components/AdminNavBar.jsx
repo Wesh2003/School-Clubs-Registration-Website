@@ -12,7 +12,7 @@ function AdminNavBar({ isAuthenticated }) {
       <NavLink to="/adminhome" className='navbarss'>
         <h4>Home</h4>
       </NavLink>
-      <NavLink to="/clubs" className='navbarss'>
+      <NavLink to="/adminclubs" className='navbarss'>
         <h4>Clubs</h4>
       </NavLink>
       <NavLink to="/adminusers" className='navbarss'>
@@ -24,7 +24,7 @@ function AdminNavBar({ isAuthenticated }) {
       <NavLink to="/adminannouncements" className='navbarss'>
         <h4>Announcements</h4>
       </NavLink>
-      <NavLink to="/">
+      <NavLink to="/adminprofile" className='navbarss'>
           <FontAwesomeIcon className='user-icon' icon={faSolidUser} />
       </NavLink>
       

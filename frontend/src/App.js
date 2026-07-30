@@ -68,6 +68,10 @@ function App() {
           <Route path="/userannouncements" element={<UserAnnouncementsPage />} />
           <Route path="/clubleaderannouncements" element={<ClubLeaderAnnouncementsPage isAuthenticated={isAuthenticated} />} />
           <Route path="/adminannouncements" element={<AdminAnnouncementsPage isAuthenticated={isAuthenticated} />} />
+          <Route path="/adminusers" element={<AdminUsersListPage />} />
+          <Route path="/adminclubleaders" element={<AdminClubLeadersListPage />} />
+          <Route path="/adminclubs" element={<AdminClubsListPage />} />
+
 
         </Routes>
         

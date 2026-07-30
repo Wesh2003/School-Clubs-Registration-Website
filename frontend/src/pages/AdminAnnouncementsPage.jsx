@@ -1,4 +1,4 @@
-import AnnouncementsTable from "../components/AnnouncementsTable";
+import AdminAnnouncements from "../components/AdminAnnouncements";
 import AdminNavBar from "../components/AdminNavBar";
 import React from 'react';
 import Footer from "../components/Footer";
@@ -9,7 +9,7 @@ function AdminAnnouncementsPage({isAuthenticated}) {
   return (
     <div className='AdminAnnouncementsPage'>
         <AdminNavBar isAuthenticated={isAuthenticated} />
-        <AnnouncementsTable isAuthenticated={isAuthenticated} />
+        <AdminAnnouncements isAuthenticated={isAuthenticated} />
          <Footer />
     </div>
   );

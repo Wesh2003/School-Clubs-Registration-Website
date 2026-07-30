@@ -210,6 +210,139 @@ def login_admin():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+
+# Add these routes to your backend after the existing admin routes
+# ======================== ADMIN USER MANAGEMENT ROUTES ========================
+
+@app.route("/admin/users", methods=["GET"])
+@jwt_required()
+def get_all_users():
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        # Get all users
+        users = Users.query.all()
+        
+        return jsonify([user.to_dict() for user in users]), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/admin/users/<int:user_id>", methods=["DELETE"])
+@jwt_required()
+def admin_delete_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        # Check if trying to delete self
+        if current_user_id == user_id:
+            return jsonify({"error": "Cannot delete your own admin account"}), 400
+        
+        user = Users.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+                # Delete related records manually before deleting the user
+        # 1. Delete club applications
+        ClubApplication.query.filter_by(user_id=user_id).delete()
+        
+        # 2. Delete memberships
+        Membership.query.filter_by(user_id=user_id).delete()
+        
+        # 3. Delete club leader records
+        ClubLeaders.query.filter_by(user_id=user_id).delete()
+        
+        # 4. Delete announcements posted by this user
+        Announcement.query.filter_by(posted_by=user_id).delete()
+        
+        # Delete user (this will cascade delete related records due to foreign key constraints)
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "User and all related records deleted successfully"}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/admin/users/<int:user_id>/activate", methods=["PUT"])
+@jwt_required()
+def activate_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        user = Users.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        user.is_active = True
+        db.session.commit()
+        return jsonify({"message": "User activated successfully", "user": user.to_dict()}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/admin/users/<int:user_id>/deactivate", methods=["PUT"])
+@jwt_required()
+def deactivate_user(user_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        # Prevent deactivating self
+        if current_user_id == user_id:
+            return jsonify({"error": "Cannot deactivate your own admin account"}), 400
+        
+        user = Users.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        user.is_active = False
+        db.session.commit()
+        return jsonify({"message": "User deactivated successfully", "user": user.to_dict()}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+# ======================== ADMIN PROFILE ROUTE ========================
+
+@app.route("/admin/profile", methods=["GET"])
+@jwt_required()
+def get_admin_profile():
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        admin = Admins.query.get(current_user_id)
+        if not admin:
+            return jsonify({"error": "Admin not found"}), 404
+        
+        return jsonify(admin.to_dict()), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # ======================== CLUB LEADER ROUTES ========================
 
 @app.route("/clubleaderregister", methods=["POST"])
@@ -290,6 +423,125 @@ def check_club_leader(user_id):
             "position": leader.position
         })
     return jsonify({"is_leader": False})
+
+
+
+# ======================== CLUB LEADERS MANAGEMENT ROUTES ========================
+
+@app.route("/clubleaders", methods=["GET"])
+@jwt_required()
+def get_all_club_leaders():
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        # Get all club leaders
+        leaders = ClubLeaders.query.all()
+        
+        return jsonify([leader.to_dict() for leader in leaders]), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/clubleaders/<int:leader_id>", methods=["PUT"])
+@jwt_required()
+def update_club_leader(leader_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        leader = ClubLeaders.query.get(leader_id)
+        if not leader:
+            return jsonify({"error": "Club leader not found"}), 404
+        
+        data = request.get_json()
+        
+        if "position" in data:
+            leader.position = data["position"]
+        if "term_end" in data:
+            leader.term_end = datetime.fromisoformat(data["term_end"]) if data["term_end"] else None
+        
+        db.session.commit()
+        return jsonify({"message": "Club leader updated successfully", "leader": leader.to_dict()}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/clubleaders/<int:leader_id>", methods=["DELETE"])
+@jwt_required()
+def delete_club_leader(leader_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        leader = ClubLeaders.query.get(leader_id)
+        if not leader:
+            return jsonify({"error": "Club leader not found"}), 404
+        
+        db.session.delete(leader)
+        db.session.commit()
+        return jsonify({"message": "Club leader deleted successfully"}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/clubleaders/<int:leader_id>/activate", methods=["PUT"])
+@jwt_required()
+def activate_club_leader(leader_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        leader = ClubLeaders.query.get(leader_id)
+        if not leader:
+            return jsonify({"error": "Club leader not found"}), 404
+        
+        leader.is_current = True
+        db.session.commit()
+        return jsonify({"message": "Club leader activated successfully", "leader": leader.to_dict()}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/clubleaders/<int:leader_id>/deactivate", methods=["PUT"])
+@jwt_required()
+def deactivate_club_leader(leader_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is admin
+        if not is_admin(current_user_id):
+            return jsonify({"error": "Admin access required"}), 403
+        
+        leader = ClubLeaders.query.get(leader_id)
+        if not leader:
+            return jsonify({"error": "Club leader not found"}), 404
+        
+        leader.is_current = False
+        db.session.commit()
+        return jsonify({"message": "Club leader deactivated successfully", "leader": leader.to_dict()}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+
 
 # ======================== CLUB MANAGEMENT ROUTES ========================
 
@@ -388,6 +640,96 @@ def delete_club(club_id):
         db.session.delete(club)
         db.session.commit()
         return jsonify({"message": "Club deleted successfully"}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+# ======================== CLUB MEMBERS ROUTE ========================
+
+@app.route("/club/members/<int:club_id>", methods=["GET"])
+@jwt_required()
+def get_club_members_with_details(club_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Check if user is a club leader for this club
+        if not check_club_leader_permission(current_user_id, club_id) and not is_admin(current_user_id):
+            return jsonify({"error": "You are not authorized to view members of this club"}), 403
+        
+        # Get all active memberships for the club
+        memberships = Membership.query.filter_by(club_id=club_id, status='active').all()
+        
+        # Get user details for each member
+        members_with_details = []
+        for membership in memberships:
+            user = Users.query.get(membership.user_id)
+            if user:
+                members_with_details.append({
+                    "membership_id": membership.id,
+                    "user_id": user.id,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "join_date": membership.join_date.strftime('%Y-%m-%d %H:%M:%S') if membership.join_date else None,
+                    "role": membership.role or 'member',
+                    "status": membership.status
+                })
+        
+        return jsonify(members_with_details), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/club/users", methods=["GET"])
+@jwt_required()
+def get_club_users():
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Get all clubs where the user is a leader
+        leader_clubs = ClubLeaders.query.filter_by(user_id=current_user_id, is_current=True).all()
+        
+        if not leader_clubs:
+            return jsonify({"error": "You are not a club leader"}), 403
+        
+        # Get all users (for adding members)
+        users = Users.query.filter_by(is_active=True).all()
+        
+        return jsonify([user.to_dict() for user in users]), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+# ======================== CLUB LEADER MEMBERSHIP MANAGEMENT ROUTES ========================
+
+@app.route("/club/members/<int:membership_id>", methods=["DELETE"])
+@jwt_required()
+def club_leader_remove_member(membership_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        # Get the membership
+        membership = Membership.query.get(membership_id)
+        if not membership:
+            return jsonify({"error": "Membership not found"}), 404
+        
+        # Check if the current user is a club leader for this club
+        if not check_club_leader_permission(current_user_id, membership.club_id) and not is_admin(current_user_id):
+            return jsonify({"error": "You are not authorized to remove members from this club"}), 403
+        
+        # Prevent removing self
+        if membership.user_id == current_user_id:
+            return jsonify({"error": "You cannot remove yourself from the club"}), 400
+        
+        # Delete the membership
+        db.session.delete(membership)
+        db.session.commit()
+        
+        return jsonify({"message": "Member removed successfully"}), 200
     
     except Exception as e:
         db.session.rollback()
@@ -668,6 +1010,69 @@ def delete_announcement(announcement_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+# Add this after the existing announcement routes
+@app.route("/announcements/<int:announcement_id>", methods=["PUT"])
+@jwt_required()
+def update_announcement(announcement_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        
+        announcement = Announcement.query.get(announcement_id)
+        if not announcement:
+            return jsonify({"error": "Announcement not found"}), 404
+        
+        # Check permissions - only admin or the original poster can update
+        if announcement.posted_by != current_user_id and not is_admin(current_user_id):
+            return jsonify({"error": "Permission denied"}), 403
+        
+        data = request.get_json()
+        
+        # Update fields
+        if "title" in data:
+            announcement.title = data["title"]
+        if "content" in data:
+            announcement.content = data["content"]
+        if "is_pinned" in data:
+            announcement.is_pinned = data["is_pinned"]
+        if "is_global" in data:
+            # If changing to global, clear club_id
+            if data["is_global"]:
+                announcement.club_id = None
+                announcement.is_global = True
+            else:
+                # If changing to club-specific, ensure club_id is provided
+                if "club_id" in data and data["club_id"]:
+                    announcement.club_id = data["club_id"]
+                    announcement.is_global = False
+                else:
+                    return jsonify({"error": "Club ID is required for club-specific announcements"}), 400
+        
+        db.session.commit()
+        return jsonify({
+            "message": "Announcement updated successfully", 
+            "announcement": announcement.to_dict()
+        }), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/announcements/<int:announcement_id>", methods=["GET"])
+@jwt_required()
+def get_announcement(announcement_id):
+    try:
+        announcement = Announcement.query.get(announcement_id)
+        if not announcement:
+            return jsonify({"error": "Announcement not found"}), 404
+        
+        return jsonify(announcement.to_dict()), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 
 # ======================== USER DASHBOARD ROUTE ========================
 
