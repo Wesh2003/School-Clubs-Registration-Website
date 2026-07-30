@@ -1,0 +1,320 @@
+/* Footer.css */
+
+/* Main Footer Container */
+.footer {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #e2e8f0;
+    padding: 40px 60px 30px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    border-top: 4px solid #667eea;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Support Section */
+.footer .contact-support {
+    flex: 2;
+    min-width: 300px;
+}
+
+.footer .contact-support h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.footer .contact-support p {
+    color: #a0aec0;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.footer .contact-support ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer .contact-support ul li {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 3px solid #667eea;
+    transition: all 0.3s ease;
+    color: #e2e8f0;
+    line-height: 1.6;
+}
+
+.footer .contact-support ul li:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+    border-left-color: #764ba2;
+}
+
+.footer .contact-support ul li strong {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.footer .contact-support ul li a {
+    color: #63b3ed;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer .contact-support ul li a:hover {
+    color: #90cdf4;
+    text-decoration: underline;
+}
+
+.footer .contact-support ul li button {
+    margin-left: 10px;
+    padding: 6px 18px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.footer .contact-support ul li button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.footer .contact-support ul li button:active {
+    transform: translateY(0px);
+}
+
+/* Social Icons Section */
+.footer .social-icons {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding-top: 10px;
+}
+
+.footer .social-icons::before {
+    content: "Follow Us";
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.footer .social-icons a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #a0aec0;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+}
+
+.footer .social-icons a:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.footer .social-icons a svg {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+    width: 24px;
+    height: 24px;
+}
+
+.footer .social-icons a:hover svg {
+    transform: scale(1.2);
+}
+
+/* Individual Social Icon Colors on Hover */
+.footer .social-icons a:hover svg.fa-facebook {
+    color: #1877f2;
+}
+
+.footer .social-icons a:hover svg.fa-twitter {
+    color: #1da1f2;
+}
+
+.footer .social-icons a:hover svg.fa-instagram {
+    color: #e4405f;
+}
+
+.footer .social-icons a:hover svg.fa-linkedin {
+    color: #0a66c2;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .footer {
+        padding: 30px 40px;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 25px 30px;
+        gap: 25px;
+    }
+
+    .footer .contact-support {
+        min-width: auto;
+    }
+
+    .footer .contact-support h2 {
+        font-size: 1.5rem;
+    }
+
+    .footer .social-icons {
+        min-width: auto;
+        align-items: stretch;
+    }
+
+    .footer .social-icons a {
+        max-width: 100%;
+        justify-content: center;
+    }
+
+    .footer .social-icons::before {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .footer .contact-support h2 {
+        font-size: 1.3rem;
+    }
+
+    .footer .contact-support ul li {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .footer .contact-support ul li button {
+        display: block;
+        margin: 8px 0 0 0;
+        width: 100%;
+        padding: 8px;
+    }
+
+    .footer .social-icons a {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+
+    .footer .social-icons a svg {
+        font-size: 1.2rem;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Animation */
+@keyframes footerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footer {
+    animation: footerFadeIn 0.6s ease-out;
+}
+
+/* Optional: Chat button pulse animation */
+.footer .contact-support ul li button {
+    animation: chatPulse 2s infinite;
+}
+
+@keyframes chatPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6);
+    }
+}
+
+/* Additional styling for better readability */
+.footer .contact-support ul li::before {
+    content: "▸";
+    color: #667eea;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.footer .contact-support ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* Footer bottom border glow effect */
+.footer {
+    position: relative;
+}
+
+.footer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 0%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
